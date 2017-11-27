@@ -4,18 +4,35 @@ using UnityEditor;
 using UnityEngine;
 
 
-[RequireComponent(typeof(AudioSource))]
+//[RequireComponent(typeof(AudioSource))]
 public class AudioWrapper : MonoBehaviour {
 
     public List<string> groups;                                       //List of groups the source belongs to. To receive broadcasts from the events
 	public List<AudioClip> sounds;                                    //List of audio clips that can be played from the source
-	AudioSource source;                     					      //The source that will play the sound(s)
-	public bool randomVolume;
-	public float volumeMin;
-	public float volumeMax;
-	public bool randomPitch;      // Must normalize random volume and pitch and have the initial value of the source unchanged
+	//AudioSource source;                     					      //The source that will play the sound(s)
+    public bool mute;
+    public bool bypassFX;
+    public bool bypassListenerFX;
+    public bool bypassReverb;
+    public bool playOnAwake;
+    public bool loop;
+    public int priority;
+    public float volume;
+    public bool randomVolume;
+    public float volumeMin;
+    public float volumeMax;
+    public float pitch;
+	public bool randomPitch;                         // Must normalize random volume and pitch and have the initial value of the source unchanged
 	public float pitchMin;
 	public float pitchMax;
+    public float pan;
+    public float spatialBlend;
+    public float reverbMix;
+    public float dopplerLevel;
+    public int spread;
+    public int minDistance;
+    public int maxDistance;
+
 
 
 
@@ -23,7 +40,7 @@ public class AudioWrapper : MonoBehaviour {
 	public ContainerType containerType;
 
 	void Start() {
-		source = GetComponent<AudioSource> ();
+		//source = GetComponent<AudioSource> ();
         SAM.playSound += PlaySound;
 	}
 
@@ -32,10 +49,33 @@ public class AudioWrapper : MonoBehaviour {
         SAM.playSound -= PlaySound;
     }
 
+    public void InsantiateSource(AudioSource newSource){
+        
+        newSource.mute = mute;
+        newSource.bypassEffects = bypassFX;
+        newSource.bypassListenerEffects = bypassListenerFX;
+        newSource.bypassReverbZones = bypassReverb;
+        newSource.playOnAwake = playOnAwake;
+        newSource.loop = loop;
+        newSource.priority = priority;
+        newSource.volume = volume;
+        newSource.pitch = pitch;
+        newSource.panStereo = pan;
+        newSource.spatialBlend = spatialBlend;
+        newSource.reverbZoneMix = reverbMix;
+        newSource.dopplerLevel = dopplerLevel;
+        newSource.spread = spread;
+        newSource.minDistance = minDistance;
+        newSource.maxDistance = maxDistance;
+
+    }
+
 
     public void PlaySound (string targetGroup) {                                              //Function called to play the sound held by the audio source according to the type of container
         if (this.groups.Contains(targetGroup))
         {
+            AudioSource source = gameObject.AddComponent(typeof(AudioSource)) as AudioSource;
+            InsantiateSource(source);
             if (randomVolume)                                                      //Randomize the volume, if random volume is selected
                 source.volume = Random.Range(volumeMin, source.volume);
             if (randomPitch)                                                       //Randomize the pitch, if random pitch is selected
