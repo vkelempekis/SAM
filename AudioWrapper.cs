@@ -9,7 +9,7 @@ public class AudioWrapper : MonoBehaviour {
 
     public List<string> groups;                                       //List of groups the source belongs to. To receive broadcasts from the events
 	public List<AudioClip> sounds;                                    //List of audio clips that can be played from the source
-	//AudioSource source;                     					      //The source that will play the sound(s)
+    List<AudioSource> sources = new List<AudioSource>();              //List that holds all the currently active audio sources 
     public bool mute;
     public bool bypassFX;
     public bool bypassListenerFX;
@@ -36,6 +36,8 @@ public class AudioWrapper : MonoBehaviour {
 
 
 
+
+
 	public enum ContainerType {Random, Sequencer, Switch} 			   //Enumeration for the type of container when there are multiple audio clips
 	public ContainerType containerType;
 
@@ -49,6 +51,8 @@ public class AudioWrapper : MonoBehaviour {
         SAM.playSound -= PlaySound;
     }
 
+
+    //Funtion used to instatiate the newly created audio source, based on the wrapper's variables
     public void InsantiateSource(AudioSource newSource){
         
         newSource.mute = mute;
@@ -75,6 +79,7 @@ public class AudioWrapper : MonoBehaviour {
         if (this.groups.Contains(targetGroup))
         {
             AudioSource source = gameObject.AddComponent(typeof(AudioSource)) as AudioSource;
+            sources.Add(source);
             InsantiateSource(source);
             if (randomVolume)                                                      //Randomize the volume, if random volume is selected
                 source.volume = Random.Range(volumeMin, source.volume);
@@ -101,6 +106,12 @@ public class AudioWrapper : MonoBehaviour {
 	
 
 	void Update () {
-		
+        foreach(AudioSource source in sources){
+            if(!source.isPlaying){
+                sources.Remove(source);
+                Destroy(source);
+
+            }
+        }
 	}
 }
