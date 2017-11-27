@@ -41,6 +41,29 @@ public class AudioWrapper : MonoBehaviour {
 	public enum ContainerType {Random, Sequencer, Switch} 			   //Enumeration for the type of container when there are multiple audio clips
 	public ContainerType containerType;
 
+    public AudioWrapper()
+    {
+        mute = false;
+        bypassFX = false;
+        bypassListenerFX = false;
+        playOnAwake = false;
+        loop = false;
+        priority = 128;
+        volume = 1;
+        randomVolume = false;
+        pitch = 1;
+        randomPitch = false;
+        pan = 0;
+        spatialBlend = 0;
+        reverbMix = 1;
+        dopplerLevel = 1;
+        spread = 0;
+        minDistance = 1;
+        maxDistance = 500;
+
+    }
+
+
 	void Start() {
 		//source = GetComponent<AudioSource> ();
         SAM.playSound += PlaySound;
