@@ -120,7 +120,8 @@ public class AudioWrapper : MonoBehaviour {
             }
             else
                 return;
-            StartCoroutine(DestroyObject(target, source.clip.length));
+            if(!source.loop)
+                StartCoroutine(DestroyObject(target, source.clip.length));
         }
 
 	}
