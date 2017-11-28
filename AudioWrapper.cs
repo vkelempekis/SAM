@@ -9,7 +9,6 @@ public class AudioWrapper : MonoBehaviour {
 
     public List<string> groups;                                       //List of groups the source belongs to. To receive broadcasts from the events
 	public List<AudioClip> sounds;                                    //List of audio clips that can be played from the source
-    List<AudioSource> sources = new List<AudioSource>();              //List that holds all the currently active audio sources 
     public bool mute;
     public bool bypassFX;
     public bool bypassListenerFX;
@@ -32,9 +31,6 @@ public class AudioWrapper : MonoBehaviour {
     public int spread;
     public int minDistance;
     public int maxDistance;
-
-
-
 
 
 
@@ -101,8 +97,9 @@ public class AudioWrapper : MonoBehaviour {
     public void PlaySound (string targetGroup) {                                              //Function called to play the sound held by the audio source according to the type of container
         if (this.groups.Contains(targetGroup))
         {
-            AudioSource source = gameObject.AddComponent(typeof(AudioSource)) as AudioSource;
-            sources.Add(source);
+            GameObject target = new GameObject(targetGroup);
+            target.transform.parent = gameObject.transform;
+            AudioSource source = target.AddComponent(typeof(AudioSource)) as AudioSource;
             InsantiateSource(source);
             if (randomVolume)                                                      //Randomize the volume, if random volume is selected
                 source.volume = Random.Range(volumeMin, source.volume);
@@ -123,18 +120,14 @@ public class AudioWrapper : MonoBehaviour {
             }
             else
                 return;
+            StartCoroutine(DestroyObject(target, source.clip.length));
         }
 
 	}
 	
 
-	void Update () {
-        foreach(AudioSource source in sources){
-            if(!source.isPlaying){
-                sources.Remove(source);
-                Destroy(source);
-
-            }
-        }
-	}
+    IEnumerator DestroyObject(GameObject obj, float time){
+        yield return new WaitForSeconds(time);
+        Destroy(obj);
+    }
 }
