@@ -359,50 +359,50 @@ public class WrapperManager : EditorWindow
         EditorGUILayout.Space();
 
         //Field to edit the priority
-        EditorGUILayout.IntSlider("Priority", currentWrapper.priority, 0, 256);
+        currentWrapper.priority = EditorGUILayout.IntSlider("Priority", currentWrapper.priority, 0, 256);
 
         EditorGUILayout.Space();
 
         //Field to edit the volume
-        EditorGUILayout.Slider("Volume", currentWrapper.volume, 0, 1);
+        currentWrapper.volume = EditorGUILayout.Slider("Volume", currentWrapper.volume, 0, 1);
 
         EditorGUILayout.Space();
 
         //Enable or not random volume
         if (currentWrapper.randomVolume = EditorGUILayout.Toggle("Randomize Volume", currentWrapper.randomVolume))
         {
-            EditorGUILayout.Slider("Min Volume", currentWrapper.volumeMin, 0, 1);
-            EditorGUILayout.Slider("Max Volume", currentWrapper.volumeMax, 0, 1);
+            currentWrapper.volumeMin = EditorGUILayout.Slider("Min Volume", currentWrapper.volumeMin, 0, 1);
+            currentWrapper.volumeMax = EditorGUILayout.Slider("Max Volume", currentWrapper.volumeMax, 0, 1);
         }
 
         EditorGUILayout.Space();
 
         //Field to edit the pitch
-        EditorGUILayout.Slider("Pitch", currentWrapper.pitch, -3, 3);
+        currentWrapper.pitch = EditorGUILayout.Slider("Pitch", currentWrapper.pitch, -3, 3);
 
         EditorGUILayout.Space();
 
         //Enable or not random pitch
         if (currentWrapper.randomPitch = EditorGUILayout.Toggle("Randomize Pitch", currentWrapper.randomPitch))
         {
-            EditorGUILayout.Slider("Min Pitch", currentWrapper.pitchMin, -1, 3);
-            EditorGUILayout.Slider("Max Pitch", currentWrapper.pitchMax, -3, 3);
+            currentWrapper.pitchMin =  EditorGUILayout.Slider("Min Pitch", currentWrapper.pitchMin, -3, 3);
+            currentWrapper.pitchMax = EditorGUILayout.Slider("Max Pitch", currentWrapper.pitchMax, -3, 3);
         }
 
         EditorGUILayout.Space();
 
         //Field to edit the stereo pan
-        EditorGUILayout.Slider("Stereo Pan", currentWrapper.pan, 0, 1);
+        currentWrapper.pan = EditorGUILayout.Slider("Stereo Pan", currentWrapper.pan, 0, 1);
 
         EditorGUILayout.Space();
 
         //Field to edit the spatial blend
-        EditorGUILayout.Slider("Spatial Blend", currentWrapper.spatialBlend, 0, 1);
+        currentWrapper.spatialBlend = EditorGUILayout.Slider("Spatial Blend", currentWrapper.spatialBlend, 0, 1);
 
         EditorGUILayout.Space();
 
         //Field to edit the reverb mix
-        EditorGUILayout.Slider("Reverb Zone Mix", currentWrapper.reverbMix, 0, 1.1f);
+        currentWrapper.reverbMix = EditorGUILayout.Slider("Reverb Zone Mix", currentWrapper.reverbMix, 0, 1.1f);
 
         EditorGUILayout.Space();
 
@@ -411,10 +411,10 @@ public class WrapperManager : EditorWindow
         if(show3D)
         {
             //Field to edit the reverb mix
-            EditorGUILayout.Slider("Doppler Level", currentWrapper.dopplerLevel, 0, 5);
+            currentWrapper.dopplerLevel = EditorGUILayout.Slider("Doppler Level", currentWrapper.dopplerLevel, 0, 5);
 
             //Field to edit the spread
-            EditorGUILayout.IntSlider("Spread", currentWrapper.spread, 0, 360);
+            currentWrapper.spread = EditorGUILayout.IntSlider("Spread", currentWrapper.spread, 0, 360);
 
             //Field to edit the min distance from the listener that the sound can be heard from
             currentWrapper.minDistance = EditorGUILayout.FloatField("Min Distance", currentWrapper.minDistance);
