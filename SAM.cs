@@ -1,37 +1,53 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
-public class SAM : MonoBehaviour {
-
-    public delegate void PlaySound(string targetGroup);  //Can I make this accept different kinds of variables? So to have delegate BroadcastedEvent
+public class SAM
+{
+    public delegate void PlaySound(string targetGroup, GameObject gameObjects);  //Can I make this accept different kinds of variables? So to have delegate BroadcastedEvent
     public static event PlaySound playSound;
 
-
-    private void Start()
+    public static SAM Instance
     {
-        //Load the events from file
+        get
+        {
+            if (instance == null)
+            {
+                instance = new SAM();
+            }
+            return instance;
+        }
+    }
+    static SAM instance;
+
+    SAM()
+    {
         EventManager.Load();
+        WrapperManager.Load();
+        WrapperManager.Subscribe();
     }
 
 
+    public void PostEvent(string eventName, GameObject gameObject)
+    {
+        var host = new GameObject().AddComponent<CoroutineHost>();
+        host.Execute(PostEventRoutine(eventName, gameObject));
 
-    public void PostEvent(string eventName){
-        StartCoroutine(PostEventRoutine(eventName));
     }
 
     // Post event with given name
-    IEnumerator PostEventRoutine(string eventName){
+    IEnumerator PostEventRoutine(string eventName, GameObject gameObject)
+    {
         for (int i = 0; i < EventManager.events.Count; i++)
         {
             if (EventManager.events[i].name == eventName)
             {
-                foreach(EventManager.Target target in EventManager.events[i].targets){
+                foreach (EventManager.Target target in EventManager.events[i].targets)
+                {
                     yield return new WaitForSeconds(target.delayTime);     // The delay before the event is posted
                     if (target.type == EventManager.Target.EventType.PostEvent)
                     {
-                        PostEvent(target.targetName);
+                        PostEvent(target.targetName, gameObject);
                     }
                     else
                     {
@@ -40,7 +56,7 @@ public class SAM : MonoBehaviour {
                             switch (target.type)
                             {
                                 case EventManager.Target.EventType.Play:
-                                    playSound(target.targetName);
+                                    playSound(target.targetName, gameObject);
                                     break;
                             }
 
