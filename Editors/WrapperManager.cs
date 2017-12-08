@@ -98,13 +98,11 @@ public class WrapperManager : EditorWindow
     //Function called to create an audio source that will play a sound on the game object that posted the event
     public static void PlaySound(string target, GameObject gameObject)
     {
-        var host = new GameObject().AddComponent<CoroutineHost>();
+        var host = new GameObject(target+" Routine").AddComponent<CoroutineHost>();
         AudioWrapper targetWrapper = wrappers.Find((obj) => obj.name == target);
+
         if (targetWrapper == null) return;
 
-
-
-        Debug.Log(targetWrapper.name);
 
         GameObject targetObj = new GameObject(targetWrapper.name);
         targetObj.transform.parent = gameObject.transform;
