@@ -74,6 +74,7 @@ public class WrapperManager : EditorWindow
     static List<AudioWrapper> wrappers;
     Vector2 listScroll;
     Vector2 editorScroll;
+    Vector2 containerScroll;
     AudioWrapper currentWrapper;
     bool showSounds = true;
     bool show3D = true;
@@ -299,13 +300,16 @@ public class WrapperManager : EditorWindow
     {
         if (currentWrapper == null) return;
 
+        GUILayout.BeginVertical("box", GUILayout.Width(position.width * 3/8), GUILayout.Height(position.height));
         editorScroll = GUILayout.BeginScrollView(editorScroll, GUILayout.Width(position.width * 3 / 8), GUILayout.Height(position.height));
         if (Event.current.Equals(Event.KeyboardEvent("return")))
         {
             GUI.FocusControl(null);
             Repaint();
         }
-        
+
+        GUILayout.Label("Wrapper Editor", EditorStyles.boldLabel);
+
         //Field to edit the name of the wrapper
         GUILayout.BeginHorizontal();
         GUILayout.Label("Name");
@@ -347,6 +351,7 @@ public class WrapperManager : EditorWindow
         if(currentWrapper.clips.Count > 1)
         {
             currentWrapper.container = (AudioWrapper.ContainerType)EditorGUILayout.EnumPopup("Container Type", currentWrapper.container);
+
         }
 
         EditorGUILayout.Space();
@@ -431,6 +436,21 @@ public class WrapperManager : EditorWindow
         }
 
 
+        GUILayout.EndVertical();
+        GUILayout.EndScrollView();
+    }
+
+    void ShowContainer()
+    {
+        if ((currentWrapper == null) || (currentWrapper.clips.Count <= 1)) return;
+
+        GUILayout.BeginVertical("box", GUILayout.Width(position.width * 3/8), GUILayout.Height(position.height));
+        containerScroll = GUILayout.BeginScrollView(containerScroll, GUILayout.Width(position.width * 3/8), GUILayout.Height(position.height));
+
+        GUILayout.Label(currentWrapper.container + " Container", EditorStyles.boldLabel);
+
+
+        GUILayout.EndVertical();
         GUILayout.EndScrollView();
     }
 
@@ -439,6 +459,7 @@ public class WrapperManager : EditorWindow
         GUILayout.BeginHorizontal();
         ShowList();
         ShowEditor();
+        ShowContainer();
         GUILayout.EndHorizontal();
 
 
