@@ -18,8 +18,11 @@ public class WrapperManager : EditorWindow
 
     public class AudioWrapper
     {
+        public enum ContainerType { Random, Sequence, Switch }
+
         public string name;
         public List<AudioClip> clips;
+        public ContainerType container;
         public bool bypassFX;
         public bool bypassListenerFX;
         public bool bypassReverb;
@@ -45,6 +48,7 @@ public class WrapperManager : EditorWindow
         {
             this.name = name;
             clips = new List<AudioClip>();
+            container = ContainerType.Random;
             bypassFX = false;
             bypassListenerFX = false;
             bypassReverb = false;
@@ -66,7 +70,6 @@ public class WrapperManager : EditorWindow
 
         }
     }
-
 
     static List<AudioWrapper> wrappers;
     Vector2 listScroll;
@@ -174,7 +177,6 @@ public class WrapperManager : EditorWindow
             {
                 AudioClip clipBuffer = new AudioClip();
                 string temp = reader.ReadLine();
-                Debug.Log(temp);
                 clipBuffer = Resources.Load(temp, typeof(AudioClip)) as AudioClip;
                 wrapperBuffer.clips.Add(clipBuffer);
 
@@ -338,6 +340,13 @@ public class WrapperManager : EditorWindow
                 }
                 GUILayout.EndHorizontal();
             }
+        }
+
+        EditorGUILayout.Space();
+
+        if(currentWrapper.clips.Count > 1)
+        {
+            currentWrapper.container = (AudioWrapper.ContainerType)EditorGUILayout.EnumPopup("Container Type", currentWrapper.container);
         }
 
         EditorGUILayout.Space();
