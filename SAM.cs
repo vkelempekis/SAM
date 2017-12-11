@@ -22,9 +22,10 @@ public class SAM
 
     SAM()
     {
-        EventManager.Load();
         WrapperManager.Load();
         WrapperManager.Subscribe();
+        EventManager.Load();
+        //EventManager.OptionsUpdate();
     }
 
 

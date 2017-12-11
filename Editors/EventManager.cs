@@ -42,6 +42,8 @@ public class EventManager : EditorWindow {
 
     AudioEvent currentEvent;    //The event being edited
 
+    public static string[] options;
+
     Vector2 listScroll;
     Vector2 editorScroll;
 
@@ -88,7 +90,20 @@ public class EventManager : EditorWindow {
     }
 
 
+    /* For a next version
+    //Updates the target options based on the names in the list of wrappers
+    public static void OptionsUpdate()
+    {
+        int size = WrapperManager.wrappers.Count + 1;
+        options = new string[size];
+        options[0] = "None";
+        for (int i = 1; i < size;i++)
+        {
+            options[i] = WrapperManager.wrappers[i - 1].name;
+        }
 
+    }
+    */
 
     //Save the current list of events to file
     void Save()
@@ -217,7 +232,6 @@ public class EventManager : EditorWindow {
             GUILayout.Label("Target");
             currentEvent.targets[i].targetName = GUILayout.TextField(currentEvent.targets[i].targetName, GUILayout.Width(200), GUILayout.MaxHeight(20));
             GUILayout.EndHorizontal();
-
 
             //Field to edit the delay time before the event gets posted for this group
             GUILayout.BeginHorizontal();

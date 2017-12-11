@@ -71,7 +71,7 @@ public class WrapperManager : EditorWindow
         }
     }
 
-    static List<AudioWrapper> wrappers;
+    public static List<AudioWrapper> wrappers;
     Vector2 listScroll;
     Vector2 editorScroll;
     Vector2 containerScroll;
@@ -269,6 +269,7 @@ public class WrapperManager : EditorWindow
         if (GUILayout.Button("Save", GUILayout.Width(50), GUILayout.Height(20)))
         {
             Save();
+            //EventManager.OptionsUpdate();
         }
         GUILayout.EndHorizontal();
 
