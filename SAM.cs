@@ -25,7 +25,7 @@ public class SAM
         WrapperManager.Load();
         WrapperManager.Subscribe();
         EventManager.Load();
-        //EventManager.OptionsUpdate();
+        EventManager.OptionsUpdate();
     }
 
 

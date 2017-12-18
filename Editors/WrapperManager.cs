@@ -289,6 +289,7 @@ public class WrapperManager : EditorWindow
             {
                 if (wrapper == currentWrapper) currentWrapper = null;
                 wrappers.Remove(wrapper);
+                GUILayout.EndHorizontal();
                 break;
             }
             GUILayout.EndHorizontal();
@@ -341,6 +342,7 @@ public class WrapperManager : EditorWindow
                 if (GUILayout.Button("X", GUILayout.Width(20), GUILayout.Height(20)))
                 {
                     currentWrapper.clips.Remove(currentWrapper.clips[i]);
+                    GUILayout.EndHorizontal();
                     break;
                 }
                 GUILayout.EndHorizontal();

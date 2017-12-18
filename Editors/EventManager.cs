@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 
-[InitializeOnLoad]
 public class EventManager : EditorWindow {
 
     //The event class that holds all event parameters
@@ -31,7 +30,7 @@ public class EventManager : EditorWindow {
 
         public Target()
         {
-            targetName = "";
+            targetName = "None";
             type = EventType.Play;
             delayTime = 0;
             probability = 1;
@@ -90,20 +89,18 @@ public class EventManager : EditorWindow {
     }
 
 
-    /* For a next version
     //Updates the target options based on the names in the list of wrappers
     public static void OptionsUpdate()
     {
         int size = WrapperManager.wrappers.Count + 1;
         options = new string[size];
         options[0] = "None";
-        for (int i = 1; i < size;i++)
+        for (int i = 1; i < size; i++)
         {
             options[i] = WrapperManager.wrappers[i - 1].name;
         }
 
     }
-    */
 
     //Save the current list of events to file
     void Save()
@@ -131,6 +128,7 @@ public class EventManager : EditorWindow {
     {
         if(events == null)
         {
+            OptionsUpdate();
             Load();
         }
     }
@@ -175,6 +173,7 @@ public class EventManager : EditorWindow {
             {
                 if (audioEvent == currentEvent) currentEvent = null;
                 events.Remove(audioEvent);
+                GUILayout.EndHorizontal();
                 break;
             }
             GUILayout.EndHorizontal();
@@ -211,9 +210,11 @@ public class EventManager : EditorWindow {
         //Horizontal line
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-        //Parameters for each target group
+        //Parameters for each target
         for (int i = 0; i < currentEvent.targets.Count; i++)
         {
+
+            int index = System.Array.IndexOf(options, currentEvent.targets[i].targetName);
             // Button to remove the target group from the target group list
             if (GUILayout.Button("X", GUILayout.Width(20), GUILayout.Height(20)))
             {
@@ -221,19 +222,20 @@ public class EventManager : EditorWindow {
                 break;
             }
 
-            //Field to edit the type of the event for this target group
+            //Field to edit the type of the event for this target
             GUILayout.BeginHorizontal();
             GUILayout.Label("Type");
             currentEvent.targets[i].type = (Target.EventType)EditorGUILayout.EnumPopup(currentEvent.targets[i].type);
             GUILayout.EndHorizontal();
 
-            //Edit the target groups name
+            //Field to edit the event's target
             GUILayout.BeginHorizontal();
             GUILayout.Label("Target");
-            currentEvent.targets[i].targetName = GUILayout.TextField(currentEvent.targets[i].targetName, GUILayout.Width(200), GUILayout.MaxHeight(20));
+            index = EditorGUILayout.Popup(index, options);
+            currentEvent.targets[i].targetName = options[index];
             GUILayout.EndHorizontal();
 
-            //Field to edit the delay time before the event gets posted for this group
+            //Field to edit the delay time before the event gets posted for this target
             GUILayout.BeginHorizontal();
             GUILayout.Label("Delay");
             currentEvent.targets[i].delayTime = EditorGUILayout.Slider(currentEvent.targets[i].delayTime, 0, 10);
@@ -241,7 +243,7 @@ public class EventManager : EditorWindow {
 
             if (currentEvent.targets[i].type != Target.EventType.PostEvent)
             {
-                //Field to edit the probability of the event getting posted for this group
+                //Field to edit the probability of the event getting posted for this target
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("Probability");
                 currentEvent.targets[i].probability = EditorGUILayout.Slider(currentEvent.targets[i].probability, 0, 1);
